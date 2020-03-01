@@ -6,17 +6,26 @@ import (
 	"fradyspace.com/go-server-practice/utils"
 	"io/ioutil"
 
-	//"fradyspace.com/go-server-practice/utils"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 var logger *utils.Logger
+var db *sql.DB
 
 func init() {
 	logger = utils.NewLogger("base sql")
 }
 
 func OpenDb(env _struct.Env) *sql.DB {
+	if db != nil {
+		err := db.Ping()
+		if err != nil {
+			goto INIT
+		}
+		return db
+	}
+
+INIT:
 	config := utils.LoadConfig(env).MySQL
 
 	db, err := sql.Open("mysql", config.Username+":"+config.Password+"@tcp("+config.Host+":"+config.Port+")/"+config.Database)
@@ -40,4 +49,11 @@ func InitDb(db *sql.DB) {
 	if err != nil {
 		logger.Fatalf(err.Error())
 	}
+}
+
+func GetCurrentDb() *sql.DB {
+	if db == nil {
+		logger.Fatalf("db not init")
+	}
+	return db
 }
