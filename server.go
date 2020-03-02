@@ -2,32 +2,31 @@ package main
 
 import (
 	"flag"
-	"fradyspace.com/go-server-practice/app/service"
-	"fradyspace.com/go-server-practice/router"
-	_struct "fradyspace.com/go-server-practice/struct"
+	. "fradyspace.com/go-server-practice/config"
+	"fradyspace.com/go-server-practice/controllers"
+	"fradyspace.com/go-server-practice/models"
+	"fradyspace.com/go-server-practice/utils/db"
+	"fradyspace.com/go-server-practice/utils/logger"
 	"log"
 	"net/http"
 )
 
 var (
-	port    = flag.String("p", "3000", "设置端口号(默认3000)")
-	isLocal = flag.Bool("l", false, "是否本地服务")
-	env     = flag.String("env", "dev", "启动环境")
-	address = "0.0.0.0"
+	port = flag.String("p", "3000", "启动端口号")
 )
 
 func main() {
-	if *isLocal {
-		address = "127.0.0.1"
-	}
+	flag.Parse()
+	log.Println("初始化配置文件...")
+	logger.CheckError("初始化配置失败", InitConfig())
+	log.Println("初始化配置文件[完成]")
 
-	// 初始化数据库
-	db := service.OpenDb(_struct.Env(*env))
-	service.InitDb(db)
-	router.Routers()
-	log.Printf("Server Started at %s:%s!\n", address, *port)
-	err := http.ListenAndServe(address+":"+*port, nil)
-	if err != nil {
-		log.Fatalln("Unable To Start: " + err.Error())
-	}
+	log.Println("初始化数据库...")
+	logger.CheckError("连接数据库失败", db.StartMysql(Config.Username+":"+Config.Password+"@tcp("+Config.Host+":"+Config.Port+")/"+Config.Database))
+	logger.CheckError("初始化数据库失败", models.InitDatabase())
+	log.Println("初始化数据库[完成]")
+
+	log.Printf("启动服务[端口: %s]...\n", *port)
+	controllers.StartRouting()
+	logger.CheckError("启动服务失败", http.ListenAndServe(":"+*port, nil))
 }
