@@ -8,7 +8,6 @@ import (
 	"fradyspace.com/go-server-practice/utils/db"
 	"fradyspace.com/go-server-practice/utils/logger"
 	"log"
-	"net/http"
 )
 
 var (
@@ -27,6 +26,6 @@ func main() {
 	log.Println("初始化数据库[完成]")
 
 	log.Printf("启动服务[端口: %s]...\n", *port)
-	controllers.StartRouting()
-	logger.CheckError("启动服务失败", http.ListenAndServe(":"+*port, nil))
+	server := controllers.StartRouting()
+	logger.CheckError("启动服务失败", server.ListenAndServe(":"+*port, nil))
 }

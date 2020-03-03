@@ -1,7 +1,15 @@
 package controllers
 
-import "fradyspace.com/go-server-practice/controllers/hero"
+import (
+	"fradyspace.com/go-server-practice/controllers/handler"
+	"fradyspace.com/go-server-practice/middleware"
+	"fradyspace.com/go-server-practice/middleware/request"
+)
 
-func StartRouting() {
-	hero.AllHeroRoutes()
+func StartRouting() *middleware.Router {
+	router := middleware.NewRouter()
+	router.Use(request.Logger)
+	router.Add("/hero", handler.HeroRoutes())
+
+	return router
 }
