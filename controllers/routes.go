@@ -10,6 +10,7 @@ func StartRouting() *middleware.Router {
 	router := middleware.NewRouter()
 	router.Use(request.Logger)
 	router.Add("/hero", handler.HeroRoutes())
+	router.Add("/page", handler.PageRoutes())
 
 	return router
 }
