@@ -17,6 +17,7 @@ func HeroRoutes() http.HandlerFunc {
 		case http.MethodPut:
 			logger.CheckError("HeroPutService", services.HeroPutService(writer, request))
 		case http.MethodDelete:
+			logger.CheckError("HeroDeleteService", services.HeroDeleteService(writer, request))
 		}
 	}
 }

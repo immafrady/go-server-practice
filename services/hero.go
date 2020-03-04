@@ -22,9 +22,7 @@ func HeroPostService(w http.ResponseWriter, req *http.Request) (err error) {
 		return
 	}
 	// 返回
-	resp := response.SuccessResponse(nil, "成功添加")
-	b := resp.ToJson()
-	_, err = w.Write(b)
+	_, err = w.Write(response.SuccessResponse(nil, "成功添加").ToJson())
 	return
 }
 
@@ -47,6 +45,22 @@ func HeroPutService(w http.ResponseWriter, req *http.Request) (err error) {
 	}
 
 	err = dao.UpdateHero(hero.Id, hero.Name)
+	if err != nil {
+		w.Write(response.DbError(err).ToJson())
+		return
+	}
+	w.Write(response.SuccessResponse(nil, "更新成功").ToJson())
+	return
+}
+
+func HeroDeleteService(w http.ResponseWriter, req *http.Request) (err error) {
+	hero := new(models.HeroModel)
+	err = json.Unmarshal(request.ReadJsonBody(req), &hero)
+	if err != nil {
+		return
+	}
+
+	err = dao.DeleteHero(hero.Id)
 	if err != nil {
 		w.Write(response.DbError(err).ToJson())
 		return

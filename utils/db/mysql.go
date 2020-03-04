@@ -18,3 +18,13 @@ func GetMysqlDB() (db *sql.DB) {
 	db = mysqlDB
 	return
 }
+
+func ExecDb(query string, args ...interface{}) (result sql.Result, err error) {
+	db := GetMysqlDB()
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		return
+	}
+	result, err = stmt.Exec(args...)
+	return
+}

@@ -12,7 +12,7 @@ func ReadJsonBody(r *http.Request) []byte {
 		b := make([]byte, 512)
 		l, err := r.Body.Read(b)
 		buf.Write(b[:l])
-		if err != io.EOF {
+		if err == io.EOF {
 			break
 		}
 	}
