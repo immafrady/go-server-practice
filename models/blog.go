@@ -5,19 +5,24 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type BlogModel struct {
+type Post struct {
 	gorm.Model
-	Id        int            `json:"id"`
-	Title     string         `json:"title"`
-	Introduce string         `json:"introduce"`
-	ImgUrl    sql.NullString `json:"img_url"`
+	Title     string         `gorm:"not null"`
+	Introduce string         `gorm:"type:mediumtext"`
+	ImgUrl    sql.NullString `gorm:"type:tinytext"`
+	Tags      []Tag          `gorm:"many2many:posts_tags;association_foreignkey"`
 }
 
-func (BlogModel) TableName() string {
-	return "blog_"
+func (Post) TableName() string {
+	return "blog_posts"
 }
 
-type TagModel struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
+type Tag struct {
+	gorm.Model
+	Name  string `gorm:"UNIQUE"`
+	Posts []Post `gorm:"many2many:posts_tags"`
+}
+
+func (Tag) TableName() string {
+	return "blog_tags"
 }
