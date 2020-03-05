@@ -27,3 +27,14 @@ func BlogTagDeleteService(tagName string) http.HandlerFunc {
 		}
 	}
 }
+
+func BlogTagGetService(tagName string) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		id, err := dao.GetTagId(tagName)
+		if err != nil {
+			w.Write(response.DbError(err).ToJson())
+		} else {
+			w.Write(response.SuccessResponse(map[string]uint{"id": id}, "").ToJson())
+		}
+	}
+}

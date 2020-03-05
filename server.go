@@ -21,7 +21,7 @@ func main() {
 	log.Println("初始化配置文件[完成]")
 
 	log.Println("初始化数据库...")
-	logger.CheckError("连接数据库失败", db.StartMysql(Config.Username+":"+Config.Password+"@tcp("+Config.Host+":"+Config.Port+")/"+Config.Database+"?charset=utf8mb4"))
+	logger.CheckError("连接数据库失败", db.StartMysql(Config.Username+":"+Config.Password+"@tcp("+Config.Host+":"+Config.Port+")/"+Config.Database+"?charset=utf8mb4&parseTime=true"))
 	logger.CheckError("初始化数据库失败", models.InitDatabase())
 	log.Println("初始化数据库[完成]")
 

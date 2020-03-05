@@ -13,6 +13,8 @@ func TagRoutes() http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		tagName := req.URL.Path[prefixLen:]
 		switch req.Method {
+		case http.MethodGet:
+			blogServices.BlogTagGetService(tagName)(w, req)
 		case http.MethodPost:
 			// 新增标签
 			blogServices.BlogTagPostService(tagName)(w, req)

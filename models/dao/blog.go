@@ -28,3 +28,31 @@ func DeleteTag(name string) (err error) {
 
 	return
 }
+
+func GetTagId(name string) (id uint, err error) {
+	gorm := db.GetMysqlDB()
+
+	tag := models.Tag{Name: name}
+	err = gorm.First(&tag).Error
+	if err != nil {
+		return
+	}
+	id = tag.ID
+	return
+}
+
+func GetPostDetail() {
+
+}
+
+func UpdatePostDetail() {
+
+}
+
+func CreateNewPost() {
+
+}
+
+func DeletePost(id uint) {
+
+}
