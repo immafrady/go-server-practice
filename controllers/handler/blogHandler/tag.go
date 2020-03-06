@@ -7,11 +7,11 @@ import (
 
 const PrefixTag = "/blog/tag/"
 
-var prefixLen = len(PrefixTag)
+var prefixLenTag = len(PrefixTag)
 
 func TagRoutes() http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
-		tagName := req.URL.Path[prefixLen:]
+		tagName := req.URL.Path[prefixLenTag:]
 		switch req.Method {
 		case http.MethodGet:
 			blogServices.BlogTagGetService(tagName)(w, req)

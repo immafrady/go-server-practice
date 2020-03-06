@@ -12,6 +12,14 @@ func DbError(err error) *response {
 	return newResponse(1002, nil, err.Error())
 }
 
+func ParamError(err error) *response {
+	return newResponse(1003, nil, err.Error())
+}
+
+func NotSupportedMethodError(err error) *response {
+	return newResponse(1004, nil, err.Error())
+}
+
 func UnknownError(err error) *response {
 	return newResponse(9999, nil, err.Error())
 }

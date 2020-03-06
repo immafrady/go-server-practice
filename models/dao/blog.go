@@ -41,18 +41,26 @@ func GetTagId(name string) (id uint, err error) {
 	return
 }
 
-func GetPostDetail() {
-
+func GetPostDetail(id uint) (post *models.Post, err error) {
+	return
 }
 
-func UpdatePostDetail() {
-
+func UpdatePostDetail(post models.Post) (err error) {
+	return
 }
 
-func CreateNewPost() {
-
+func CreateNewPost(post models.Post) (err error) {
+	gormDb := db.GetMysqlDB()
+	err = gormDb.Create(post).Error
+	return
 }
 
-func DeletePost(id uint) {
+func DeletePost(id uint) (err error) {
+	gormDb := db.GetMysqlDB()
+	post := models.Post{}
+	post.ID = id
 
+	err = gormDb.Delete(post).Error
+
+	return
 }
